@@ -347,3 +347,78 @@ Tests:       43 passed, 43 total
 Snapshots:   0 total
 Time:        3.131 s
 ```
+
+次に統合テストコードを作成する。
+
+テストコードは `packages/@aws-cdk-testing/framework-integ/test/aws-sns/test` に作成する
+
+```bash
+touch packages/@aws-cdk-testing/framework-integ/test/aws-sns/test/integ.sns-display-name.ts
+```
+
+今回は以下のようなテストコードを追加する。
+
+```ts
+// packages/@aws-cdk-testing/framework-integ/test/aws-sns/test/integ.sns-display-name.ts
+import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import * as integ from '@aws-cdk/integ-tests-alpha';
+
+// テスト用のStackを定義
+class TestStack extends Stack {
+  constructor(scope: App, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    new Topic(this, 'MyTopic', {
+      topicName: 'MyTopicName',
+      // displayNameを設定
+      displayName: 'MyDisplayName',
+    });
+  }
+}
+
+const app = new App();
+
+const stack = new TestStack(app, 'DisplayNameTopicTestStack');
+
+// 統合テストの実行
+new integ.IntegTest(app, 'SnsTest', {
+  testCases: [stack],
+});
+```
+
+追加したら再度ビルドして統合テストの実行
+
+```bash
+cd /packages/aws-cdk-lib
+yarn tsc
+
+cd packages/@aws-cdk-testing/framework-integ
+yarn tsc
+yarn integ aws-sns/test/integ.sns-display-name.js --update-on-failed
+```
+
+以下のようになればOk！
+
+```bash
+Verifying integration test snapshots...
+
+  NEW        aws-sns/test/integ.sns-display-name 2.374s
+
+Snapshot Results: 
+
+Tests:    1 failed, 1 total
+Failed: /home/ec2-user/aws-cdk-for-workshop/packages/@aws-cdk-testing/framework-integ/test/aws-sns/test/integ.sns-display-name.js
+
+Running integration tests for failed tests...
+
+Running in parallel across regions: us-east-1, us-east-2, us-west-2
+Running test /home/ec2-user/aws-cdk-for-workshop/packages/@aws-cdk-testing/framework-integ/test/aws-sns/test/integ.sns-display-name.js in us-east-1
+  SUCCESS    aws-sns/test/integ.sns-display-name-SnsTest/DefaultTest 74.573s
+       NO ASSERTIONS
+
+Test Results: 
+
+Tests:    1 passed, 1 total
+Done in 77.59s.
+```
