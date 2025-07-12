@@ -29,3 +29,35 @@ code tunnel service install
 以下のリポジトリのIssueをのぞいてみる
 
 https://github.com/aws/aws-cdk/issues
+
+## ダミーリポジトリをクローンしてくる
+
+自分のアカウントにフォークしてもOK!
+
+```bash
+git clone https://github.com/jaws-ug-cdk/aws-cdk-for-workshop
+```
+
+クローンしたら以下のファイルを除いてみる！
+
+packages/aws-cdk-lib/aws-sqs/lib/queue.ts
+
+依存関係をインストール
+
+```bash
+yarn install
+```
+
+ビルドを行う
+
+```bash
+npx lerna run build --concurrency 4
+```
+
+ビルドが終わったらワークショップ用のブランチを作成する。
+
+```bash
+git switch -c workshop-guide-1
+
+git branch
+```
