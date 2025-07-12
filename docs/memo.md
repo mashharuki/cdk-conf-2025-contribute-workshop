@@ -9,3 +9,8 @@ https://github.com/jaws-ug-cdk/cdk-conf-2024-contribute-workshop/blob/main/CdkCo
 リソース(標準)で作成する。
 
 → Amazon linux2023でEC2インスタンスをSSMでアクセス可能とする。
+
+**ここで作成されるリソース**
+- VPC
+- EC2インスタンス
+- 接続用のエンドポイント
