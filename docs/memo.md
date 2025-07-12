@@ -422,3 +422,18 @@ Test Results:
 Tests:    1 passed, 1 total
 Done in 77.59s.
 ```
+
+この内容に関する説明を `aws-cdk-lib/aws-sns/README.md`に追加する
+
+```markdown
+## Display Name
+
+You can set a display name for the topic.
+To set a display name, use the `displayName` property:
+
+```ts
+const topic = new sns.Topic(this, 'Topic', {
+  displayName: 'MyDisplayName',
+});
+```
+```
