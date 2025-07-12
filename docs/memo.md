@@ -14,3 +14,12 @@ https://github.com/jaws-ug-cdk/cdk-conf-2024-contribute-workshop/blob/main/CdkCo
 - VPC
 - EC2インスタンス
 - 接続用のエンドポイント
+
+
+EC2インスタンスにアクセスして以下のコマンドを実行する
+
+```bash
+code tunnel service install
+```
+
+これでEC2インスタンスをVS Codeサーバーとすることが可能！！
