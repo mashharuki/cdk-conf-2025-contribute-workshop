@@ -50,6 +50,8 @@ yarn install
 
 ビルドを行う
 
+初回は62のプロジェクトをビルドする。
+
 ```bash
 npx lerna run build --concurrency 4
 ```
