@@ -265,3 +265,85 @@ git switch -c workshop-guide-1
 
 git branch
 ```
+
+今回は以下のファイルを修正する
+
+```bash
+aws-cdk/packages/aws-cdk-lib/aws-sns/lib/topic.ts
+```
+
+displayNameの説明はCloudFormationのドキュメントからコピーしてくる
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-displayname
+
+修正が完了したら以下のコマンドでユニットテストを実行する
+
+```bash
+yarn test aws-sns/test/sns.test.ts
+```
+
+以下の通りになればOK!
+
+```bash
+Topic
+    ✓ can add a policy to the topic (13 ms)
+    ✓ can enforce ssl when creating the topic (9 ms)
+    ✓ give publishing permissions (12 ms)
+    ✓ TopicPolicy passed document (7 ms)
+    ✓ Add statements to policy (7 ms)
+    ✓ Create topic policy and enforce ssl (7 ms)
+    ✓ topic resource policy includes unique SIDs (8 ms)
+    ✓ fromTopicArn (2 ms)
+    ✓ fromTopicArn fifo (1 ms)
+    ✓ fromTopicAttributes contentBasedDeduplication false (1 ms)
+    ✓ fromTopicAttributes contentBasedDeduplication true (1 ms)
+    ✓ fromTopicAttributes throws with contentBasedDeduplication on non-fifo topic (1 ms)
+    ✓ sets account for imported topic env
+    ✓ sets region for imported topic env (1 ms)
+    ✓ test metrics (3 ms)
+    ✓ subscription is created under the topic scope by default (8 ms)
+    ✓ if "scope" is defined, subscription will be created under that scope (14 ms)
+    ✓ fails if topic policy has no actions (8 ms)
+    ✓ fails if topic policy has no IAM principals (2 ms)
+    ✓ topic policy should be set if topic as a notifications rule target (12 ms)
+    ✓ specify delivery status logging configuration through construct props (12 ms)
+    ✓ add delivery status logging configuration to a topic (8 ms)
+    ✓ fails if success feedback sample rate is outside the appropriate range (20 ms)
+    ✓ fails if success feedback sample rate is decimal (3 ms)
+    ✓ specify displayName (5 ms)
+    topic tests
+      ✓ all defaults (30 ms)
+      ✓ specify topicName (15 ms)
+      ✓ specify kmsMasterKey (17 ms)
+      ✓ Adds .fifo suffix when no topicName is passed (8 ms)
+      ✓ specify fifo without .fifo suffix in topicName (7 ms)
+      ✓ specify fifo with .fifo suffix in topicName (6 ms)
+      ✓ specify fifo without contentBasedDeduplication (6 ms)
+      ✓ specify fifo with contentBasedDeduplication (6 ms)
+      ✓ throw with contentBasedDeduplication on non-fifo topic (20 ms)
+      ✓ specify signatureVersion (9 ms)
+      ✓ throw with incorrect signatureVersion (2 ms)
+    message retention period
+      ✓ specify message retention period in days (5 ms)
+      ✓ throw error if message retention period is invalid value "0" (1 ms)
+      ✓ throw error if message retention period is invalid value "366" (1 ms)
+      ✓ throw error if message retention period is invalid value "12.3" (1 ms)
+      ✓ throw error if message retention period is invalid value "NaN" (1 ms)
+      ✓ throw error when specify messageRetentionPeriodInDays to standard topic (1 ms)
+    tracingConfig
+      ✓ specify tracingConfig (6 ms)
+
+
+=============================== Coverage summary ===============================
+Statements   : 43.77% ( 4469/10208 )
+Branches     : 26.61% ( 1073/4031 )
+Functions    : 31.12% ( 743/2387 )
+Lines        : 44.6% ( 4373/9803 )
+================================================================================
+Jest: "global" coverage threshold for statements (55%) not met: 43.77%
+Jest: "global" coverage threshold for branches (35%) not met: 26.61%
+Test Suites: 1 passed, 1 total
+Tests:       43 passed, 43 total
+Snapshots:   0 total
+Time:        3.131 s
+```
