@@ -437,3 +437,127 @@ const topic = new sns.Topic(this, 'Topic', {
 });
 ```
 ```
+
+## ECRの変更にも挑戦！
+
+ECRのプロバティ追加にも挑戦！！
+
+以下のテストコードを追加
+
+```ts
+test('add imageTagMutability property to L2 Construct (IMMUTABLE Pattern)', () => {
+    const stack = new cdk.Stack();
+    new ecr.Repository(stack, 'Repo', {
+      autoDeleteImages: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      imageTagMutability: ecr.ImageTagMutability.IMMUTABLE
+    });
+
+    Template.fromStack(stack).hasResourceProperties('AWS::ECR::Repository', {
+      ImageTagMutability: 'IMMUTABLE'
+    });
+  });
+
+  test('add imageTagMutability property to L2 Construct (MUTABLE Pattern)', () => {
+    const stack = new cdk.Stack();
+    new ecr.Repository(stack, 'Repo', {
+      autoDeleteImages: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      imageTagMutability: ecr.ImageTagMutability.MUTABLE
+    });
+
+    Template.fromStack(stack).hasResourceProperties('AWS::ECR::Repository', {
+      ImageTagMutability: 'MUTABLE'
+    });
+  });
+```
+
+テストの実施結果
+
+```bash
+yarn test aws-ecr/test/repository.test.ts
+```
+
+テスト実施結果
+
+```bash
+ PASS  aws-ecr/test/repository.test.ts
+  repository
+    ✓ construct repository (30 ms)
+    ✓ repository creation with imageScanOnPush (20 ms)
+    ✓ tag-based lifecycle policy with tagPrefixList (11 ms)
+    ✓ tag-based lifecycle policy with tagPatternList (8 ms)
+    ✓ both tagPrefixList and tagPatternList cannot be specified together in a rule (32 ms)
+    ✓ tagPrefixList can only be specified when tagStatus is set to Tagged (1 ms)
+    ✓ tagPatternList can only be specified when tagStatus is set to Tagged (2 ms)
+    ✓ TagStatus.Tagged requires the specification of a tagPrefixList or a tagPatternList (3 ms)
+    ✓ A tag pattern can contain four wildcard characters (7 ms)
+    ✓ A tag pattern cannot contain more than four wildcard characters (2 ms)
+    ✓ emptyOnDelete can be set (6 ms)
+    ✓ emptyOnDelete requires 'RemovalPolicy.DESTROY' (1 ms)
+    ✓ add day-based lifecycle policy (10 ms)
+    ✓ add count-based lifecycle policy (8 ms)
+    ✓ mixing numbered and unnumbered rules (6 ms)
+    ✓ tagstatus Any is automatically sorted to the back (6 ms)
+    ✓ lifecycle rules can be added upon initialization (6 ms)
+    ✓ calculate repository URI (9 ms)
+    ✓ import with concrete arn (1 ms)
+    ✓ import with arn without /repository (1 ms)
+    ✓ fails if importing with token arn and no name (1 ms)
+    ✓ import with token arn and repository name (see awslabs/aws-cdk#1232) (6 ms)
+    ✓ import only with a repository name (arn is deduced) (6 ms)
+    ✓ arnForLocalRepository can be used to render an ARN for a local repository (5 ms)
+    ✓ resource policy (8 ms)
+    ✓ fails if repository policy has no actions (8 ms)
+    ✓ fails if repository policy has no IAM principals (4 ms)
+    ✓ warns if repository policy has resources (10 ms)
+    ✓ does not warn if repository policy does not have resources (6 ms)
+    ✓ default encryption configuration (5 ms)
+    ✓ kms encryption configuration (5 ms)
+    ✓ kms encryption with custom kms configuration (9 ms)
+    ✓ fails if with custom kms key and AES256 as encryption (1 ms)
+    ✓ removal policy is "Retain" by default (5 ms)
+    ✓ "Delete" removal policy can be set explicitly (5 ms)
+    ✓ repo name is embedded in CustomResourceProvider description (11 ms)
+    ✓ add imageTagMutability property to L2 Construct (IMMUTABLE Pattern) (10 ms)
+    ✓ add imageTagMutability property to L2 Construct (MUTABLE Pattern) (10 ms)
+    events
+      ✓ onImagePushed without imageTag creates the correct event (9 ms)
+      ✓ onImageScanCompleted without imageTags creates the correct event (7 ms)
+      ✓ onImageScanCompleted with one imageTag creates the correct event (7 ms)
+      ✓ onImageScanCompleted with multiple imageTags creates the correct event (8 ms)
+      ✓ removal policy is "Retain" by default (5 ms)
+      ✓ "Delete" removal policy can be set explicitly (4 ms)
+      ✓ grant adds appropriate resource-* (6 ms)
+      ✓ grant push (5 ms)
+      ✓ grant pull for role (16 ms)
+      ✓ grant push for role (10 ms)
+      ✓ grant pullpush for role (11 ms)
+      ✓ grant read adds appropriate permissions (5 ms)
+      ✓ grant read adds appropriate permissions (8 ms)
+    repository name validation
+      ✓ repository name validations (2 ms)
+      ✓ repository name validation skips tokenized values (1 ms)
+      ✓ fails with message on invalid repository names (1 ms)
+      ✓ fails if repository name has less than 2 or more than 256 characters (2 ms)
+      ✓ fails if repository name does not follow the specified pattern (3 ms)
+      ✓ return value addToResourcePolicy (10 ms)
+    when auto delete images is set to true
+      ✓ it is ignored if emptyOnDelete is set (6 ms)
+      ✓ permissions are correctly for multiple ecr repos (23 ms)
+      ✓ synth fails when removal policy is not DESTROY (1 ms)
+
+
+=============================== Coverage summary ===============================
+Statements   : 49.01% ( 4748/9686 )
+Branches     : 32.11% ( 1178/3668 )
+Functions    : 36.71% ( 837/2280 )
+Lines        : 49.87% ( 4639/9301 )
+================================================================================
+Jest: "global" coverage threshold for statements (55%) not met: 49.01%
+Jest: "global" coverage threshold for branches (35%) not met: 32.11%
+Test Suites: 1 passed, 1 total
+Tests:       60 passed, 60 total
+Snapshots:   0 total
+Time:        2.443 s, estimated 3 s
+```
