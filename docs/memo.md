@@ -235,6 +235,29 @@ Snapshots:   0 total
 Time:        13.217 s
 ```
 
+integration テスト(統合テスト)実行方法
+
+```bash
+cd packages/@aws-cdk-testing/framework-integ
+yarn tsc
+# 実際に integration テストを実行する
+# jsファイルが生成されていることを確認してから
+yarn integ aws-sqs/test/integ.sqs.js 
+```
+
+以下のようになればOK!
+
+```bash
+Verifying integration test snapshots...
+
+  UNCHANGED  aws-sqs/test/integ.sqs 0.665s
+
+Snapshot Results: 
+
+Tests:    1 passed, 1 total
+Done in 1.29s.
+```
+
 ビルドが終わったらワークショップ用のブランチを作成する。
 
 ```bash
