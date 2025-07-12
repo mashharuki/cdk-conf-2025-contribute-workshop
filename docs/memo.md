@@ -23,3 +23,9 @@ code tunnel service install
 ```
 
 これでEC2インスタンスをVS Codeサーバーとすることが可能！！
+
+## 着手できそうなIssueを決める！
+
+以下のリポジトリのIssueをのぞいてみる
+
+https://github.com/aws/aws-cdk/issues
